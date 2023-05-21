@@ -7,7 +7,7 @@ const jwt = require("jsonwebtoken"); //TODO: require('crypto').randomBytes(64).t
 
 const app = express();
 
-//?----> middlewares
+//?----> middlewares start
 app.use(cors());
 app.use(express.json()); //! Admin: vinayo8123@glumark.com , warner@david.com / Chandpurasi1!
 
@@ -25,8 +25,12 @@ function verifyJWT(req, res, next) {
     next();
   });
 }
-//?----> middlewares
-const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.2lbo3hl.mongodb.net/?retryWrites=true&w=majority`;
+//?----> middlewares end
+
+
+const uri =
+  `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.f7eznot.mongodb.net/?retryWrites=true&w=majority`;
+// Create a MongoClient with a MongoClientOptions object to set the Stable API version
 const client = new MongoClient(uri, {
   serverApi: {
     version: ServerApiVersion.v1,
