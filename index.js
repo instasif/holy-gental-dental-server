@@ -27,9 +27,7 @@ function verifyJWT(req, res, next) {
 }
 //?----> middlewares end
 
-
-const uri =
-  `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.f7eznot.mongodb.net/?retryWrites=true&w=majority`;
+const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.f7eznot.mongodb.net/?retryWrites=true&w=majority`;
 // Create a MongoClient with a MongoClientOptions object to set the Stable API version
 const client = new MongoClient(uri, {
   serverApi: {
@@ -54,7 +52,7 @@ async function run() {
       .db("doctorsPortal")
       .collection("doctorsCollection");
 
-    //! verify admin jwt middleware
+    //?-----> verify admin jwt middleware starts
     const verifyAdmin = async (req, res, next) => {
       const decodedEmail = req.decoded.email;
       const query = { email: decodedEmail };
@@ -64,7 +62,7 @@ async function run() {
       }
       next();
     };
-    //! verify admin jwt middleware
+    //?-----> verify admin jwt middleware ends
 
     //TODO: get all the services options
     app.get("/appoinmentOptions", async (req, res) => {
@@ -157,6 +155,27 @@ async function run() {
       }
     });
 
+    app.get("/allBookings", verifyJWT, verifyAdmin, async (req, res) => {
+      try {
+        const query = {};
+        const result = await bookingCollection.find(query).toArray();
+        res.send(result);
+      } catch (error) {
+        res.send(error.message);
+      }
+    });
+
+    app.delete("/allBookings/:id", verifyJWT, verifyAdmin, async (req, res) => {
+      try {
+        const id = req.params.id;
+        const filter = { _id: new ObjectId(id) };
+        const result = await bookingCollection.deleteOne(filter);
+        res.send(result);
+      } catch (error) {
+        res.send(error.message);
+      }
+    });
+
     //TODO: Create me a JWT token
     app.get("/jwt", async (req, res) => {
       try {
@@ -210,15 +229,6 @@ async function run() {
     //TODO: make admin role
     app.put("/users/admin/:id", verifyJWT, verifyAdmin, async (req, res) => {
       try {
-        //! (2) let first: this user admin or not
-        /*const decodedEmail = req.decoded.email;
-        const query = { email: decodedEmail };
-        const user = await userCollection.findOne(query);
-        if (user?.role !== "admin") {
-          return res.status(403).send({ message: "forbidden access" });
-        }*/
-
-        //! (1)
         const id = req.params.id;
         const filter = { _id: new ObjectId(id) };
         const options = { upsert: true };
