@@ -1,7 +1,0 @@
-
-this keys are for server site: ( .env )
-
-
-DB_USER=chakrabarttytuli
-DB_PASS=39bx1JxxUHqbymA2
-ACCESS_TOKEN=2c8bac07bdec3cf0f8fbc355cfabfc6898ec7bb4edff9cb7dcd074d81332a8c40ea545c80df1629e0c3c3287ad9419f59a1dfdb3b8abcd1c074af54d94d5a596

@@ -26,10 +26,7 @@ function verifyJWT(req, res, next) {
   });
 }
 //?----> middlewares end
-
-const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.f7eznot.mongodb.net/?retryWrites=true&w=majority`;
-console.log(uri);
-// Create a MongoClient with a MongoClientOptions object to set the Stable API version
+const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.2lbo3hl.mongodb.net/?retryWrites=true&w=majority`;
 const client = new MongoClient(uri, {
   serverApi: {
     version: ServerApiVersion.v1,
@@ -64,6 +61,15 @@ async function run() {
       next();
     };
     //?-----> verify admin jwt middleware ends
+
+    app.get("/test", async (req, res) => {
+      try {
+        const test = await appoinmentOptionsCollection.find({}).toArray();
+        res.send(test);
+      } catch (error) {
+        res.send(error.message);
+      }
+    });
 
     //TODO: get all the services options
     app.get("/appoinmentOptions", async (req, res) => {
